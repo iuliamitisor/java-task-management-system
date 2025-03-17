@@ -8,6 +8,7 @@ public class Main extends JPanel {
     public static void main(String[] args) {
 
         SwingUtilities.invokeLater(() -> {
+            // Create the GUI and show the user all functionalities.
             GUI gui = new GUI();
         });
     }

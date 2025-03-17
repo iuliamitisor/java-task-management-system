@@ -35,8 +35,12 @@ public class TasksManagement {
             JOptionPane.showMessageDialog(null, "Error: Employee not found!");
             return;
         }
+
+        // If the employee is not in the map, add them with an empty list of tasks.
         taskAssignmentMap.putIfAbsent(employee, new ArrayList<>());
         List<Task> tasksList = taskAssignmentMap.get(employee);
+
+        // If the task is not already assigned to the employee, add it to the list of tasks.
         if (!tasksList.contains(task)) {
             tasksList.add(task);
             assignmentsData.saveTaskAssignments(taskAssignmentMap);
@@ -53,12 +57,15 @@ public class TasksManagement {
         }
 
         taskAssignmentMap = assignmentsData.loadTaskAssignments();
+        // Get the list of tasks assigned to the employee or an empty list if the employee has no tasks assigned.
         List<Task> tasksList = taskAssignmentMap.getOrDefault(employee, new ArrayList<>());
 
+        // If the employee has no tasks assigned, duration is 0.
         if (tasksList.isEmpty()) {
             return 0;
         }
 
+        // Add up the duration of all completed tasks to get work duration.
         int totalDuration = 0;
         for (Task task : tasksList) {
             if ("Completed".equals(task.getStatus())) {

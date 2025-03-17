@@ -1,6 +1,5 @@
 package org.example.presentation;
 
-import org.example.persistence.TaskData;
 import org.example.model.Employee;
 import org.example.model.SimpleTask;
 import org.example.model.ComplexTask;
@@ -40,6 +39,7 @@ public class GUI {
         menu.setAlignmentX(Component.CENTER_ALIGNMENT);
         menu.add(Box.createVerticalGlue());
 
+        // Add buttons for each functionality.
         JButton addTaskButton = new JButton("Add task");
         JButton addEmployeeButton = new JButton("Add employee");
         JButton viewEmployeesButton = new JButton("View employees");
@@ -79,6 +79,7 @@ public class GUI {
         menu.add(employeesStatsButton);
         menu.add(Box.createVerticalGlue());
 
+        // Add functionalities to the buttons - make them render the desired panel.
         addTaskButton.addActionListener(e -> cardLayout.show(cardPanel, "Add Task"));
         addEmployeeButton.addActionListener(e -> cardLayout.show(cardPanel, "Add Employee"));
         viewEmployeesButton.addActionListener(e -> cardLayout.show(cardPanel, "View Employees"));
@@ -89,6 +90,7 @@ public class GUI {
         filterEmployeesButton.addActionListener(e -> cardLayout.show(cardPanel, "Filter Employees"));
         employeesStatsButton.addActionListener(e -> cardLayout.show(cardPanel, "View Employees Statistics"));
 
+        // Add all panels to the layout to make them accessible.
         cardPanel.add(menu, "Menu");
         cardPanel.add(createAddTaskPanel(), "Add Task");
         cardPanel.add(createAddSimpleTaskPanel(frame), "Add Simple Task");
@@ -102,6 +104,7 @@ public class GUI {
         cardPanel.add(createFilterEmployeesPanel(), "Filter Employees");
         cardPanel.add(createEmployeesStatisticsPanel(), "View Employees Statistics");
 
+        // Application starts on the menu panel.
         cardLayout.show(cardPanel, "Menu");
 
         frame.add(cardPanel);
@@ -112,13 +115,9 @@ public class GUI {
         JPanel viewTasksPanel = new JPanel();
         viewTasksPanel.setLayout(new BoxLayout(viewTasksPanel, BoxLayout.Y_AXIS));
 
-        // Retrieve the list of tasks
+        // Retrieve data for the table entries.
         List<Task> tasks = utility.loadAllTasks();
-
-        // Define column names
         String[] columnNames = {"Task ID", "Task Description", "Task Duration", "Task Status", "Task Type"};
-
-        // Create data array
         Object[][] data = new Object[tasks.size()][5];
         int index = 0;
         for (Task task : tasks) {
@@ -134,13 +133,13 @@ public class GUI {
             index++;
         }
 
-        // Create JTable
+        // Create the table.
         JTable tasksTable = new JTable(data, columnNames);
         JScrollPane scrollPane = new JScrollPane(tasksTable);
         viewTasksPanel.add(scrollPane);
         viewTasksPanel.add(Box.createVerticalStrut(10));
 
-        // Create Back to menu button
+        // Back to menu button
         JButton back = new JButton("Back to menu");
         back.setAlignmentX(Component.CENTER_ALIGNMENT);
         viewTasksPanel.add(back);
@@ -154,13 +153,9 @@ public class GUI {
         JPanel viewEmployeesPanel = new JPanel();
         viewEmployeesPanel.setLayout(new BoxLayout(viewEmployeesPanel, BoxLayout.Y_AXIS));
 
-        // Retrieve the list of employees
+        // Retrieve data for the table entries.
         List<Employee> employees = utility.loadAllEmployees();
-
-        // Define column names
         String[] columnNames = {"Employee ID", "Employee Name"};
-
-        // Create data array
         Object[][] data = new Object[employees.size()][2];
         int index = 0;
         for (Employee employee : employees) {
@@ -169,13 +164,13 @@ public class GUI {
             index++;
         }
 
-        // Create JTable
+        // Create the table.
         JTable tasksTable = new JTable(data, columnNames);
         JScrollPane scrollPane = new JScrollPane(tasksTable);
         viewEmployeesPanel.add(scrollPane);
         viewEmployeesPanel.add(Box.createVerticalStrut(10));
 
-        // Create Back to menu button
+        // Back to menu button
         JButton back = new JButton("Back to menu");
         back.setAlignmentX(Component.CENTER_ALIGNMENT);
         viewEmployeesPanel.add(back);
@@ -189,6 +184,8 @@ public class GUI {
         JPanel addTaskPanel = new JPanel();
         addTaskPanel.setLayout(new BoxLayout(addTaskPanel, BoxLayout.Y_AXIS));
         addTaskPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        // Buttons to add a simple or a complex task.
         JButton addSimpleTaskButton = new JButton("Add simple task");
         JButton addComplexTaskButton = new JButton("Add complex task");
         addSimpleTaskButton.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -227,6 +224,7 @@ public class GUI {
         endHourTextField.setMaximumSize(new Dimension(200, 20));
         endHourTextField.setAlignmentX(Component.CENTER_ALIGNMENT);
 
+        // Button to add the simple task and restart the application in order to reload the data.
         JButton addSimpleTask = new JButton("Add Simple Task");
         addSimpleTask.setAlignmentX(Component.CENTER_ALIGNMENT);
         addSimpleTask.addActionListener(e -> {
@@ -266,9 +264,8 @@ public class GUI {
         JTextField descriptionTextField = new JTextField(20);
         descriptionTextField.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        // Load existing tasks
+        // Retrieve data for the table entries.
         List<Task> availableTasks = utility.loadAllTasks();
-        // Define column names
         String[] columnNames = {"Task ID", "Task Description", "Task Duration", "Task Status", "Task Type"};
         Object[][] data = new Object[availableTasks.size()][5];
         int index = 0;
@@ -285,6 +282,7 @@ public class GUI {
             index++;
         }
 
+        // Make the table scrollable and the entries selectable.
         JTable taskTable = new JTable(data, columnNames);
         taskTable.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
         JScrollPane scrollPane = new JScrollPane(taskTable);
@@ -292,7 +290,10 @@ public class GUI {
         JButton addComplexTask = new JButton("Add Complex Task");
         addComplexTask.setAlignmentX(Component.CENTER_ALIGNMENT);
 
+        // Button to select subtasks, add the complex task and restart the application in order to reload the data.
         addComplexTask.addActionListener(e -> {
+
+            // User can select subtasks directly from the gui.
             String description = descriptionTextField.getText();
             int[] selectedRows = taskTable.getSelectedRows();
             List<Task> selectedTasks = new ArrayList<>();
@@ -310,6 +311,7 @@ public class GUI {
 
             JOptionPane.showMessageDialog(null, "Complex Task added successfully!");
         });
+
         addComplexTaskPanel.add(taskLabel);
         addComplexTaskPanel.add(descriptionTextField);
         addComplexTaskPanel.add(Box.createVerticalStrut(10));
@@ -335,6 +337,8 @@ public class GUI {
 
         JButton addEmployee = new JButton("Add employee");
         addEmployee.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        // Button to add the employee and restart the application in order to reload the data.
         addEmployee.addActionListener(e -> {
             String name = nameTextField.getText();
             utility.saveEmployee(new Employee(name));
@@ -364,6 +368,7 @@ public class GUI {
         taskIdTextField.setMaximumSize(taskIdTextField.getPreferredSize());
         taskIdTextField.setAlignmentX(Component.CENTER_ALIGNMENT);
 
+        // User can select new status of the task by choosing from a dropdown menu.
         JLabel statusLabel = new JLabel("Status:");
         statusLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         String[] statusOptions = {"Uncompleted", "Completed"};
@@ -373,6 +378,8 @@ public class GUI {
 
         JButton modifyStatusButton = new JButton("Modify Status");
         modifyStatusButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        // Button to modify the task status and restart the application in order to reload the data.
         modifyStatusButton.addActionListener(e -> {
             int taskId = Integer.parseInt(taskIdTextField.getText());
             String status = statusComboBox.getSelectedItem().toString();
@@ -397,38 +404,31 @@ public class GUI {
     }
 
     private JPanel createViewEmployeesDurationsPanel() {
-
         JPanel viewEmployeesDurationsPanel = new JPanel();
         viewEmployeesDurationsPanel.setLayout(new BoxLayout(viewEmployeesDurationsPanel, BoxLayout.Y_AXIS));
 
-        // Retrieve the list of employees
+        // Retrieve data for the table entries.
         List<Employee> employees = utility.loadAllEmployees();
-
-        // Define column names
         String[] columnNames = {"Employee ID", "Employee Name", "Total Work Duration"};
-
-        // Create data array
         Object[][] data = new Object[employees.size()][3];
         int i = 0;
         for (Employee employee : employees) {
-            int totalDuration = tasksManagement.calculateEmployeeWorkDuration(employee.getId());
-            System.out.println("Total duration: " + totalDuration);
             data[i][0] = employee.getId();
             data[i][1] = employee.getName();
-            data[i][2] = totalDuration;
+            data[i][2] = tasksManagement.calculateEmployeeWorkDuration(employee.getId());
             i++;
             if (i >= employees.size()) {
                 break;
             }
         }
 
-        // Create JTable
+        // Create the table.
         JTable employeesDurationsTable = new JTable(data, columnNames);
         JScrollPane scrollPane = new JScrollPane(employeesDurationsTable);
         viewEmployeesDurationsPanel.add(scrollPane);
         viewEmployeesDurationsPanel.add(Box.createVerticalStrut(10));
 
-        // Create Back to menu button
+        // Back to menu button
         JButton back = new JButton("Back to menu");
         back.setAlignmentX(Component.CENTER_ALIGNMENT);
         viewEmployeesDurationsPanel.add(back);
@@ -443,32 +443,29 @@ public class GUI {
         filterEmployeesPanel.setLayout(new BoxLayout(filterEmployeesPanel, BoxLayout.Y_AXIS));
         filterEmployeesPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
+        // Retrieve data for the table entries.
         List<Employee> employees = utility.loadAllEmployees();
-        List<Task> tasks = utility.loadAllTasks();
         List<Employee> filteredEmployees = utility.filterEmployees(employees);
-
         String[] columnNames = {"Employee ID", "Employee Name", "Work Duration"};
-
-        // Populate data array
         Object[][] data = new Object[filteredEmployees.size()][3];
-        int index = 0;
+        int i = 0;
         for (Employee employee : filteredEmployees) {
-            data[index][0] = employee.getId();
-            data[index][1] = employee.getName();
-            data[index][2] = tasksManagement.calculateEmployeeWorkDuration(employee.getId());
-            index++;
-            if (index >= filteredEmployees.size()) {
+            data[i][0] = employee.getId();
+            data[i][1] = employee.getName();
+            data[i][2] = tasksManagement.calculateEmployeeWorkDuration(employee.getId());
+            i++;
+            if (i >= filteredEmployees.size()) {
                 break;
             }
         }
 
-        // Create table with data
+        // Create the table.
         JTable filteredEmployeesTable = new JTable(data, columnNames);
         JScrollPane scrollPane = new JScrollPane(filteredEmployeesTable);
         filterEmployeesPanel.add(scrollPane);
         filterEmployeesPanel.add(Box.createVerticalStrut(10));
 
-        // Create Back to menu button
+        // Back to menu button
         JButton back = new JButton("Back to menu");
         back.setAlignmentX(Component.CENTER_ALIGNMENT);
         filterEmployeesPanel.add(back);
@@ -483,30 +480,30 @@ public class GUI {
         employeesStatisticsPanel.setLayout(new BoxLayout(employeesStatisticsPanel, BoxLayout.Y_AXIS));
         employeesStatisticsPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
+        // Retrieve data for the table entries.
         List<Employee> employees = utility.loadAllEmployees();
         Map<String, Map<String, Integer>> stats = utility.calculateTaskStatus(employees);
-
         String[] columnNames = {"Employee ID", "Employee Name", "Completed Tasks", "Uncompleted Tasks"};
-
         Object[][] data = new Object[employees.size()][4];
-        int index = 0;
+        int i = 0;
         for (Employee employee : employees) {
-            data[index][0] = employee.getId();
-            data[index][1] = employee.getName();
-            data[index][2] = stats.get(employee.getName()).get("Completed");
-            data[index][3] = stats.get(employee.getName()).get("Uncompleted");
-            index++;
-            if (index >= employees.size()) {
+            data[i][0] = employee.getId();
+            data[i][1] = employee.getName();
+            data[i][2] = stats.get(employee.getName()).get("Completed");
+            data[i][3] = stats.get(employee.getName()).get("Uncompleted");
+            i++;
+            if (i >= employees.size()) {
                 break;
             }
         }
 
+        // Create the table.
         JTable filteredEmployeesTable = new JTable(data, columnNames);
         JScrollPane scrollPane = new JScrollPane(filteredEmployeesTable);
         employeesStatisticsPanel.add(scrollPane);
         employeesStatisticsPanel.add(Box.createVerticalStrut(10));
 
-        // Create Back to menu button
+        // Back to menu button
         JButton back = new JButton("Back to menu");
         back.setAlignmentX(Component.CENTER_ALIGNMENT);
         employeesStatisticsPanel.add(back);
@@ -535,6 +532,8 @@ public class GUI {
 
         JButton assignTaskButton = new JButton("Assign Task");
         assignTaskButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        // Button to assign a task to an employee and restart the application in order to reload the data.
         assignTaskButton.addActionListener(e -> {
             int employeeId = Integer.parseInt(employeeIdTextField.getText());
             int taskId = Integer.parseInt(taskIdTextField.getText());

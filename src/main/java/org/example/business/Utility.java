@@ -1,5 +1,6 @@
 package org.example.business;
 
+import org.example.model.ComplexTask;
 import org.example.persistence.EmployeeData;
 import org.example.persistence.TaskData;
 import org.example.model.Employee;
@@ -21,10 +22,10 @@ public class Utility {
         taskData = new TaskData();
     }
 
-    // Filter employees whose total work duration exceeds 40 hours.
     public List<Employee> filterEmployees(List<Employee> employees) {
         List<Employee> filteredEmployees = new ArrayList<>();
         for (Employee employee : employees) {
+            // Add only employees whose total work duration exceeds 40 hours.
             if (tasksManagement.calculateEmployeeWorkDuration(employee.getId()) > 40) {
                 filteredEmployees.add(employee);
             }
@@ -35,14 +36,17 @@ public class Utility {
         return filteredEmployees;
     }
 
-    // Calculate the status of tasks for each employee.
     public Map<String, Map<String, Integer>> calculateTaskStatus(List<Employee> employees) {
         Map<String, Map<String, Integer>> taskStatusMap = new HashMap<>();
         for (Employee employee : employees) {
+
+            // Get the list of tasks assigned to the employee or an empty list if the employee has no tasks assigned.
             tasksManagement.getTaskAssignmentMap().putIfAbsent(employee, new ArrayList<>());
             List<Task> tasksList = tasksManagement.getTaskAssignmentMap().get(employee);
             int completedTasks = 0;
             int uncompletedTasks = 0;
+
+            // Count the number of completed and uncompleted tasks.
             for (Task task : tasksList) {
                 if ("Completed".equals(task.getStatus())) {
                     completedTasks++;
@@ -50,6 +54,7 @@ public class Utility {
                     uncompletedTasks++;
                 }
             }
+
             Map<String, Integer> statusMap = new HashMap<>();
             statusMap.put("Completed", completedTasks);
             statusMap.put("Uncompleted", uncompletedTasks);
@@ -73,6 +78,7 @@ public class Utility {
     public void saveEmployee(Employee newEmployee) {
         employeeData.addEmployee(newEmployee);
     }
+
     public Task findTaskById(int taskId) {
         return taskData.findTaskById(taskId);
     }

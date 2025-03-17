@@ -23,7 +23,6 @@ public class AssignmentsData {
         File file = new File(TASK_ASSIGNMENTS_FILE);
 
         if (!file.exists()) {
-            System.out.println("Task assignment file not found. Returning empty map.");
             return new HashMap<>();
         }
 
@@ -32,11 +31,10 @@ public class AssignmentsData {
             if (obj instanceof Map) {
                 return (Map<Employee, List<Task>>) obj;
             } else {
-                System.out.println("Invalid file format. Returning empty map.");
                 return new HashMap<>();
             }
         } catch (EOFException e) {
-            System.out.println("Task assignment file is empty. Returning empty map.");
+            return new HashMap<>();
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
