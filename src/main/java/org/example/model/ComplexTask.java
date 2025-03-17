@@ -7,10 +7,13 @@ public non-sealed class ComplexTask extends Task {
         this.tasks = tasks;
     }
 
-    public void addTaskToCpxTask(Task subtask) {
+    public void addTask(Task subtask) {
 
     }
 
+    public void deleteTask(Task subtask) {
+
+    }
 
     @Override
     public int estimateDuration() {
