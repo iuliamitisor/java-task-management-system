@@ -20,11 +20,23 @@ public class AssignmentsData {
     }
 
     public Map<Employee, List<Task>> loadTaskAssignments() {
-        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(TASK_ASSIGNMENTS_FILE))) {
+        File file = new File(TASK_ASSIGNMENTS_FILE);
+
+        if (!file.exists()) {
+            System.out.println("Task assignment file not found. Returning empty map.");
+            return new HashMap<>();
+        }
+
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file))) {
             Object obj = ois.readObject();
             if (obj instanceof Map) {
                 return (Map<Employee, List<Task>>) obj;
+            } else {
+                System.out.println("Invalid file format. Returning empty map.");
+                return new HashMap<>();
             }
+        } catch (EOFException e) {
+            System.out.println("Task assignment file is empty. Returning empty map.");
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
@@ -32,3 +44,4 @@ public class AssignmentsData {
         return new HashMap<>();
     }
 }
+
