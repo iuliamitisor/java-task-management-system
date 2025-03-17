@@ -1,6 +1,7 @@
 package org.example.business;
 
 import org.example.persistence.EmployeeData;
+import org.example.persistence.AssignmentsData;
 import org.example.persistence.TaskData;
 import org.example.model.Employee;
 import org.example.model.Task;
@@ -15,11 +16,13 @@ public class TasksManagement {
     private Map<Employee, List<Task>> taskAssignmentMap = new HashMap<>();
     private EmployeeData employeeData;
     private TaskData taskData;
+    private AssignmentsData assignmentsData;
 
     public TasksManagement() {
         this.employeeData = new EmployeeData();
         this.taskData = new TaskData();
-        this.taskAssignmentMap = taskData.loadTaskAssignments();
+        this.assignmentsData = new AssignmentsData();
+        this.taskAssignmentMap = assignmentsData.loadTaskAssignments();
     }
 
     public void assignTaskToEmployee(int idEmployee, Task task) {
@@ -36,7 +39,7 @@ public class TasksManagement {
         List<Task> tasksList = taskAssignmentMap.get(employee);
         if (!tasksList.contains(task)) {
             tasksList.add(task);
-            taskData.saveTaskAssignments(taskAssignmentMap);
+            assignmentsData.saveTaskAssignments(taskAssignmentMap);
         } else {
             JOptionPane.showMessageDialog(null, "Task is already assigned to this employee.");
         }
@@ -49,7 +52,7 @@ public class TasksManagement {
             return -1;
         }
 
-        taskAssignmentMap = taskData.loadTaskAssignments();
+        taskAssignmentMap = assignmentsData.loadTaskAssignments();
         List<Task> tasksList = taskAssignmentMap.getOrDefault(employee, new ArrayList<>());
 
         if (tasksList.isEmpty()) {
